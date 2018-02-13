@@ -213,7 +213,7 @@ class AirCargoProblem(Problem):
         for clause in self.goal:
             if clause not in kb.clauses:
                 count = count + 1
-        
+
         return count
 
 

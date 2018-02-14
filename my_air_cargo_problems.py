@@ -130,10 +130,18 @@ class AirCargoProblem(Problem):
 
         possible_actions = []
         for action in self.actions_list:
-            if not bool(set(action.precond_neg).intersection(set(kb.clauses))): # this is possible since there is
-                                                                #  no action.precond_neg in kb.clauses, therefore next
-                                                                #  is to check if the action_preconditions set is a subset of kb.clauses
-                if set(action.precond_pos).issubset(set(kb.clauses)):
+
+            posible = True
+            for c_neg in action.precond_neg:
+                if c_neg in kb.clauses:
+                    posible = False
+                    break
+
+            if posible and set(action.precond_pos).issubset(set(kb.clauses)):
+            # if not bool(set(action.precond_neg).intersection(set(kb.clauses))): # this is possible since there is
+            #                                                     #  no action.precond_neg in kb.clauses, therefore next
+            #                                                     #  is to check if the action_preconditions set is a subset of kb.clauses
+                #if set(action.precond_pos).issubset(set(kb.clauses)):
                     possible_actions.append(action)
 
         return possible_actions
@@ -158,7 +166,7 @@ class AirCargoProblem(Problem):
 
         for fluent in last_state.neg:
             if fluent not in action.effect_add:
-                new_state.negg.append(fluent)
+                new_state.neg.append(fluent)
 
         for fluent in action.effect_add:
             if fluent not in new_state.pos:
